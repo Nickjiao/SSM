@@ -1,5 +1,7 @@
 package com.jiao.dao;
 
+import org.springframework.stereotype.Repository;
+
 import com.jiao.domain.User;  
 
 /** 
@@ -7,7 +9,8 @@ import com.jiao.domain.User;
  *  
  * @author linbingwen 
  * @since 2015Äê9ÔÂ28ÈÕ 
- */  
+ */
+@Repository  
 public interface UserDao {  
     /** 
      *  

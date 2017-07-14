@@ -10,8 +10,8 @@ import com.jiao.domain.User;
  * 功能概要：UserService实现类 
  *  
  * @author linbingwen 
- * @since  2015年9月28日  
- */  
+ * @since  2015年9月28日
+ */
 @Service  
 public class UserServiceImpl implements UserService{  
     @Autowired  

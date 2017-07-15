@@ -1,5 +1,6 @@
 package com.jiao.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import com.jiao.domain.User;  
@@ -20,5 +21,9 @@ public interface UserDao {
      * @return 
      */  
     public User selectUserById(Integer userId);  
-     
-}  
+    
+    public User selectPostById(Integer userId);
+    
+    public Integer selectIdByNamePwd(@Param("name") String userName,
+    		@Param("pd") String userPwd);
+}

@@ -25,7 +25,8 @@
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">  
         <!-- 不使用properties来配置 -->  
         <!-- <property name="driverClassName" value="com.mysql.jdbc.Driver" />   
-            <property name="url" value="jdbc:mysql://localhost:3306/test" />   
+            <property name="url" value="jdbc:mysql://localhost:3306/ssm_db
+            ?useUnicode=true&amp;characterEncoding=UTF-8" />   
             <property name="username" value="root" />   
             <property name="password" value="123456" /> -->  
        <!-- 使用properties来配置 -->  
@@ -47,17 +48,18 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
         <property name="basePackage"  
             value="com.jiao.dao" />
-    </bean>  
+    </bean>
     
     <!-- 配置Mybatis的文件 ，mapperLocations配置**Mapper.xml文件位置，configLocation配置mybatis-config文件位置-->  
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">  
         <property name="dataSource" ref="dataSource" />  
-        <property name="mapperLocations" value="classpath*:com/jiao/mapper/**/*.xml"/>    
+        <property name="mapperLocations" value="classpath*:com/jiao/mapper/**/*Mapper.xml"/>    
         <property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />  
         <!-- <property name="typeAliasesPackage" value="com.tiantian.ckeditor.model"   
             /> -->  
     </bean>  
-  
+
+   
     <!-- 自动扫描注解的bean -->  
     <context:component-scan base-package="com.jiao.service" />  
 </beans>  

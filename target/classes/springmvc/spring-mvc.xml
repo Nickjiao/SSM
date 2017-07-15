@@ -30,6 +30,9 @@
             <mvc:exclude-mapping path="/login"/>
             <mvc:exclude-mapping path="/register"/>
             <mvc:exclude-mapping path="/check"/>
+            <mvc:exclude-mapping path="/uploadOneFile"/>
+            <mvc:exclude-mapping path="/uploadMultiFile"/>
+            <mvc:exclude-mapping path="/doUpload"/>
             <bean class="com.jiao.handleInterceptor.HandleInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
@@ -37,4 +40,13 @@
      <mvc:default-servlet-handler/>
 
      <mvc:annotation-driven/>
+
+  
+    <bean id="multipartResolver"
+       class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+ 
+        <!-- Maximum file size: 1MB -->
+        <!-- 1MB = 125000 Byte -->
+       <property name="maxUploadSize" value="125000" />
+   </bean>
 </beans>  

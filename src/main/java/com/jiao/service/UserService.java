@@ -1,5 +1,7 @@
 package com.jiao.service;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.jiao.domain.User;  
   
 /** 
@@ -9,6 +11,10 @@ import com.jiao.domain.User;
  * @since  2015Äê9ÔÂ28ÈÕ  
  */  
 public interface UserService {  
-    User selectUserById(Integer userId);  
-  
+    User selectUserById(Integer userId);
+    
+    User selectPostById(Integer userId);
+
+    Integer selectIdByNamePwd(@Param("name") String userName,
+    		@Param("pd") String userPwd);
 }  

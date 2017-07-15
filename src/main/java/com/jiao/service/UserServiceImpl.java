@@ -1,5 +1,6 @@
 package com.jiao.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;  
 import org.springframework.stereotype.Service;  
   
@@ -21,5 +22,16 @@ public class UserServiceImpl implements UserService{
         return userDao.selectUserById(userId);  
           
     }  
+    
+    public Integer selectIdByNamePwd(@Param("name") String userName,
+    		@Param("pd") String userPwd){  
+        return userDao.selectIdByNamePwd(userName,userPwd);  
+    }
+
+	@Override
+	public User selectPostById(Integer userId) {
+		// TODO Auto-generated method stub
+		return userDao.selectPostById(userId);
+	} 
   
 }  

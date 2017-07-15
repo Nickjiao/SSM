@@ -123,7 +123,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
+					<tr class="info">
 						<td>
 							${requestScope.title_1}
 						</td>
@@ -131,69 +131,166 @@
 							${requestScope.author_1}
 						</td>
 						<td>
-							${requestScope.clicknum}
+							${requestScope.clicknum1}
 						</td>
 						<td>
-							${requestScope.replynum}
+							${requestScope.replynum1}
 						</td>
 						<td>
-							${requestScope.lastreplydate}
-						</td>
-					</tr>
-					<tr class="success">
-						<td>
-							1
-						</td>
-						<td>
-							TB - Monthly
-						</td>
-						<td>
-							01/04/2012
-						</td>
-						<td>
-							Approved
+							${requestScope.lastreplydate1}
 						</td>
 					</tr>
-					<tr class="error">
+					<tr>
 						<td>
-							2
+							${requestScope.title_2}
 						</td>
 						<td>
-							TB - Monthly
+							${requestScope.author_2}
 						</td>
 						<td>
-							02/04/2012
+							${requestScope.clicknum2}
 						</td>
 						<td>
-							Declined
-						</td>
-					</tr>
-					<tr class="warning">
-						<td>
-							3
+							${requestScope.replynum2}
 						</td>
 						<td>
-							TB - Monthly
-						</td>
-						<td>
-							03/04/2012
-						</td>
-						<td>
-							Pending
+							${requestScope.lastreplydate2}
 						</td>
 					</tr>
 					<tr class="info">
 						<td>
-							4
+							${requestScope.title_3}
 						</td>
 						<td>
-							TB - Monthly
+							${requestScope.author_3}
 						</td>
 						<td>
-							04/04/2012
+							${requestScope.clicknum3}
 						</td>
 						<td>
-							Call in to confirm
+							${requestScope.replynum3}
+						</td>
+						<td>
+							${requestScope.lastreplydate3}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							${requestScope.title_4}
+						</td>
+						<td>
+							${requestScope.author_4}
+						</td>
+						<td>
+							${requestScope.clicknum4}
+						</td>
+						<td>
+							${requestScope.replynum4}
+						</td>
+						<td>
+							${requestScope.lastreplydate4}
+						</td>
+					</tr>
+					<tr class="info">
+						<td>
+							${requestScope.title_5}
+						</td>
+						<td>
+							${requestScope.author_5}
+						</td>
+						<td>
+							${requestScope.clicknum5}
+						</td>
+						<td>
+							${requestScope.replynum5}
+						</td>
+						<td>
+							${requestScope.lastreplydate5}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							${requestScope.title_6}
+						</td>
+						<td>
+							${requestScope.author_6}
+						</td>
+						<td>
+							${requestScope.clicknum6}
+						</td>
+						<td>
+							${requestScope.replynum6}
+						</td>
+						<td>
+							${requestScope.lastreplydate6}
+						</td>
+					</tr>
+					<tr class="info">
+						<td>
+							${requestScope.title_7}
+						</td>
+						<td>
+							${requestScope.author_7}
+						</td>
+						<td>
+							${requestScope.clicknum7}
+						</td>
+						<td>
+							${requestScope.replynum7}
+						</td>
+						<td>
+							${requestScope.lastreplydate7}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							${requestScope.title_8}
+						</td>
+						<td>
+							${requestScope.author_8}
+						</td>
+						<td>
+							${requestScope.clicknum8}
+						</td>
+						<td>
+							${requestScope.replynum8}
+						</td>
+						<td>
+							${requestScope.lastreplydate8}
+						</td>
+					</tr>
+					<tr class="info">
+						<td>
+							${requestScope.title_9}
+						</td>
+						<td>
+							${requestScope.author_9}
+						</td>
+						<td>
+							${requestScope.clicknum9}
+						</td>
+						<td>
+							${requestScope.replynum9}
+						</td>
+						<td>
+							${requestScope.lastreplydate9}
+						</td>
+					</tr>
+					<tr>
+						<td>
+							${requestScope.title_10}
+						</td>
+						<td>
+							${requestScope.author_10}
+						</td>
+						<td>
+							${requestScope.clicknum10}
+						</td>
+						<td>
+							${requestScope.replynum10}
+						</td>
+						<td>
+							${requestScope.lastreplydate10}
 						</td>
 					</tr>
 				</tbody>

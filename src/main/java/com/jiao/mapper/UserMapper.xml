@@ -3,14 +3,31 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
 <mapper namespace="com.jiao.dao.UserDao">  
 <!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->  
-    <resultMap id="BaseResultMap" type="com.jiao.domain.User">  
-        <id column="USER_ID" property="userId" jdbcType="INTEGER" />  
-        <result column="USER_NAME" property="userName" jdbcType="CHAR" />  
-        <result column="USER_PASSWORD" property="userPassword" jdbcType="CHAR" />  
-        <result column="USER_EMAIL" property="userEmail" jdbcType="CHAR" />  
+    <resultMap id="BaseResultMap" type="com.jiao.domain.User">
+        <id column="userid" property="userId" jdbcType="INTEGER" />  
+        <result column="username" property="userName" jdbcType="VARCHAR" />  
+        <result column="pwd" property="userPassword" jdbcType="VARCHAR" />  
+        <result column="useremail" property="userEmail" jdbcType="VARCHAR" /> 
+        <result column="regtime" property="userRegtimestamp" jdbcType="TIMESTAMP" /> 
+        <collection property="posts" ofType="com.jiao.domain.Post" column="userid">
+			<id     column="pid"        property="_pid"        jdbcType="INTEGER"/> 
+			<result column="uid"        property="_userid"     jdbcType="INTEGER" />  
+        	<result column="cretime"    property="_cretime"    jdbcType="TIMESTAMP" />  
+        	<result column="contentdep" property="_contentdep" jdbcType="BLOB" /> 
+        	<result column="content"    property="_content"    jdbcType="BLOB" /> 
+        	<result column="title"      property="_title"      jdbcType="VARCHAR" /> 
+		</collection>
     </resultMap>  
     <!-- 查询单条记录 -->  
     <select id="selectUserById" parameterType="int" resultMap="BaseResultMap">  
-        SELECT * FROM t_user WHERE USER_ID = #{userId}  
+        SELECT * FROM userinf WHERE userid = #{userId}  
     </select>  
+    
+    <select id="selectIdByNamePwd" resultType="Integer">  
+        SELECT userid FROM userinf WHERE username = #{name,jdbcType=VARCHAR} AND pwd = #{pd,jdbcType=VARCHAR}  
+    </select>  
+    
+    <select id="selectPostById" parameterType="int" resultMap="BaseResultMap">
+    	SELECT * FROM userinf u,post p WHERE (u.userid=p.uid) AND (u.userid=#{userId})
+    </select>
 </mapper>  

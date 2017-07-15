@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class CookieUtil {
-	 public static final int TIME = 60 * 60 * 1 * 1;  //10天存活时间
+	 public static final int TIME = 60 * 60 * 1 * 1;  //1小时存活时间
 	
 	 
 	 //添加Cookie

@@ -91,4 +91,9 @@
         <error-code>500</error-code>  
         <location>/WEB-INF/errorpage/500.jsp</location>  
     </error-page>  
+    
+     <!-- Spring ContextLoaderListener -->
+   <listener>
+       <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+   </listener>
 </web-app>  

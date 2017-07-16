@@ -24,7 +24,7 @@ public class UserServiceTest extends SpringTestCase {
       
     @Test  
     public void selectUserByIdTest(){  
-        User user = userService.selectUserById(10);  
+        User user = userService.selectUserById(0);  
         user = userService.selectPostById(0);
         List<Post> p = user.getPosts();
         for(Post pp:p) {

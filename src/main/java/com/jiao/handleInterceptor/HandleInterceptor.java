@@ -33,11 +33,11 @@ public class HandleInterceptor implements HandlerInterceptor {
                              Object obj) throws Exception {
           //拿到cookie
           //也就是获取session里的登录状态值
-        String cookie= CookieUtil.getValByName(request,"isLogin");
+        String cookie= CookieUtil.getValByName(request,"isLoginSSM");
         if (cookie!=null){
         //session解密
             Map<String,Object> map= AuthUtil.decodeSession(cookie);
-            String loginStatus= (String) map.get("isLogin");
+            String loginStatus= (String) map.get("isLoginSSM");
             Long timestamp= (Long) map.get("timestamp");
             if (loginStatus!=null&&timestamp!=null&&new Date().getTime()-timestamp<1000*60*60*24*10){
                 return true;

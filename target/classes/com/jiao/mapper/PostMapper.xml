@@ -10,8 +10,20 @@
         	<result column="content"    property="_content"    jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/> 
         	<result column="title"      property="_title"      jdbcType="VARCHAR" javaType="String"/> 
     </resultMap>  
+    
+    <!-- 单个帖子 --> 
+    <select id="selectPostByid" resultMap="PostResultMap">  
+        SELECT * FROM post WHERE uid=#{id}
+    </select>
+    
     <!-- 查询前十个帖子 --> 
     <select id="selectFirstTenPost" resultMap="PostResultMap">  
         SELECT * FROM post LIMIT 10
     </select>  
+    
+    <insert id="addNewPost">
+    	INSERT INTO post(uid,contentdep,content,title) 
+    		values(#{userid,jdbcType=INTEGER},#{contdep,jdbcType=BLOB},
+    		#{cont,jdbcType=BLOB},#{ttl,jdbcType=VARCHAR})
+    </insert>
 </mapper>

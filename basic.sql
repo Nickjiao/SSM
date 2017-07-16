@@ -13,7 +13,7 @@ CREATE TABLE userinf(
     (3,'wang','1197018090@qq.com',123456);
     
 CREATE TABLE post(
-	pid int not null,
+	pid int auto_increment,
     uid int not null,
     cretime timestamp default CURRENT_TIMESTAMP,
     contentdep blob null, 

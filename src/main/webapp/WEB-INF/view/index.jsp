@@ -29,20 +29,22 @@
 <div id="header">
 <div class="banner" style="padding-left:5px;"><a href="http://www.baidu.com"><font size="7" color="blue"><b>众生相社区</b></font></a></div>
 <div class="h guide" colspan="2">&#187;
-    <%if(CookieUtil.getValByName(request,"isLogin") != null){%>
-	<!--mb--> 欢迎 <!--mbend-->
-	| <a href="http://www.baidu.com">帮助</a>
-	| <a href="${pageContext.request.contextPath}/download">下载文件</a>
-	| <a href="${pageContext.request.contextPath}/uploadOneFile">上传单个文件</a>
-	| <a href="${pageContext.request.contextPath}/uploadMultiFile">上传多个文件</a>
-    <% } else { %>
-    <!--mb-->您尚未　<a href="${pageContext.request.contextPath}/login" class="navbar-link" target="_blank">登陆</a> | 
-    <a href="${pageContext.request.contextPath}/register" class="navbar-link" target="_blank">注册</a><!--mbend-->
-	| <a href="http://www.baidu.com">帮助</a>
-	| <a href="${pageContext.request.contextPath}/download">下载文件</a>
-	| <a href="${pageContext.request.contextPath}/uploadOneFile">上传单个文件</a>
-	| <a href="${pageContext.request.contextPath}/uploadMultiFile">上传多个文件</a>
-	<% } %>
+    <%		Object st = session.getAttribute("isLogin");
+    		if (st != null && st.equals(true)) {%>
+            	<!--mb--> 欢迎 <!--mbend-->
+            	<a href="http://www.baidu.com">帮助</a>
+            	| <a href="${pageContext.request.contextPath}/download">下载文件</a>
+            	| <a href="${pageContext.request.contextPath}/uploadOneFile">上传单个文件</a>
+            	| <a href="${pageContext.request.contextPath}/uploadMultiFile">上传多个文件</a>
+            	| <a href="${pageContext.request.contextPath}/post">发帖</a>
+                <% } else { %>
+                <!--mb-->您尚未　<a href="${pageContext.request.contextPath}/login" class="navbar-link">登陆</a> | 
+                <a href="${pageContext.request.contextPath}/register" class="navbar-link">注册</a><!--mbend-->
+            	| <a href="http://www.baidu.com">帮助</a>
+            	| <a href="${pageContext.request.contextPath}/download">下载文件</a>
+            	| <a href="${pageContext.request.contextPath}/uploadOneFile">上传单个文件</a>
+            	| <a href="${pageContext.request.contextPath}/uploadMultiFile">上传多个文件</a>
+            	<%}%>
 </div>
 
 <div id="blank" style="height:10px; clear:both"></div>
@@ -203,7 +205,6 @@
 		<div>
 			 	<address> <strong>Twitter, Inc.</strong><br /> 795 Folsom Ave, Suite 600<br /> San Francisco, CA 94107<br /> <abbr title="Phone">P:</abbr> (123) 456-7890</address>
 		</div>
-
 </div>
 </body>
 

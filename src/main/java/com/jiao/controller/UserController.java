@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -17,17 +18,22 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -44,7 +50,7 @@ public class UserController {
     private UserService userService;  
     @Autowired
     private PostService postService;
-      
+    
     @RequestMapping("/")
     public ModelAndView getIndex(HttpServletRequest req,
     		HttpServletResponse response){      
@@ -72,11 +78,18 @@ public class UserController {
     	if(userService.selectIdByNamePwd(username,password) != null) {
     		//核对成功
         	Map<String, Object> loginInfo = new HashMap<>();
-            loginInfo.put("isLogin", "yes!");
+            loginInfo.put("isLoginSSM", "yes!");
             loginInfo.put("timestamp", new Date());
             String sessionId = JavaWebToken.createJavaWebToken(loginInfo);//token机制，详情请看上文所说的文章
-            CookieUtil.addCookie(response,"isLogin",sessionId);//加cookie
-            ModelAndView mav = new ModelAndView("index");  
+            CookieUtil.addCookie(response,"isLoginSSM",sessionId);//加cookie
+            ModelAndView mav = new ModelAndView("index");
+            HttpSession se = req.getSession();
+            se.setAttribute("isLogin", true);
+            int userId = userService.selectIdByNamePwd(username,password);
+            Cookie cookie = new Cookie("userid",String.valueOf(userId));
+            cookie.setPath("/");
+    		cookie.setMaxAge(60 * 60 * 1 * 1);
+            response.addCookie(cookie);
             return mav;
     	}else {
     		 ModelAndView mav = new ModelAndView("login");  
@@ -214,4 +227,50 @@ public class UserController {
         //Copy bytes from source to destination(outputstream in this example), closes both streams.
         FileCopyUtils.copy(inputStream, response.getOutputStream());
 	}
+    
+    @RequestMapping(value="/post")
+    public String config(HttpServletRequest request, HttpServletResponse response) {
+        return "editpost";
+ 
+    }
+    
+    @RequestMapping(value="/UeditorPost",method=RequestMethod.POST)
+    public void addNewPost(HttpServletRequest request, HttpServletResponse response) {
+    	String ttl = request.getParameter("title");
+    	String word_content = request.getParameter("editorValue");
+    	byte[] cont = word_content.getBytes();
+    	Cookie[] cookies = request.getCookies();
+    	String userId;int uid;
+    	for(Cookie c:cookies) {
+    		if(c.getName().equals("userid")) {
+    			userId = c.getValue();
+    			uid = Integer.parseInt(userId);
+    			postService.addNewPost(uid, null, cont, ttl);
+    			try {
+					request.getRequestDispatcher("showpost").forward(request, response);
+				} catch (ServletException | IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    		}
+    	}
+    }
+    
+    @RequestMapping(value="/showpost")
+    public ModelAndView showpost(HttpServletRequest request, HttpServletResponse response) {
+    	ModelAndView model = new ModelAndView("showpost");
+    	model.addObject("title",request.getParameter("title"));
+    	model.addObject("content",request.getParameter("editorValue"));
+		return model;
+    }
+    
+    @RequestMapping(value="/showpost/#{bypid}")
+    public ModelAndView showpostByPid(int pid) {
+    	ModelAndView model = new ModelAndView("showpost");
+    	Post post = postService.selectPostByid(pid);
+    	model.addObject("title",post.get_title());
+    	String cont = new String(post.get_content());
+    	model.addObject("content",cont);
+		return model;
+    }
 }  

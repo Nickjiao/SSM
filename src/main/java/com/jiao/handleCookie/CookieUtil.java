@@ -42,5 +42,18 @@ public class CookieUtil {
         }
         return value;
     }
+    
+    public static boolean isLogin(HttpServletRequest request,
+    		String cookieName) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookieName.equals(cookie.getName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

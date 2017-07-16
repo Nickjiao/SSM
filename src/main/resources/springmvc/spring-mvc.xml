@@ -25,6 +25,8 @@
         <mvc:interceptor>
             <!--拦截后台页面的请求-->
             <mvc:mapping path="/tectalk"/>
+            <mvc:mapping path="/post"/>
+            <mvc:mapping path="/UeditorPost"/>
             <!--不拦截登录页和登录的请求-->
             <mvc:exclude-mapping path="/"/>
             <mvc:exclude-mapping path="/login"/>

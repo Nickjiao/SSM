@@ -125,7 +125,7 @@
 				<tbody>
 					<tr class="info">
 						<td>
-							${requestScope.title_1}
+							<a href="${pageContext.request.contextPath}/showpost/bytitle/${requestScope.pid_1}">${requestScope.title_1}</a>
 						</td>
 						<td>
 							${requestScope.author_1}

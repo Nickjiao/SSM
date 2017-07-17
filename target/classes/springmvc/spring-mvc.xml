@@ -27,6 +27,7 @@
             <mvc:mapping path="/tectalk"/>
             <mvc:mapping path="/post"/>
             <mvc:mapping path="/UeditorPost"/>
+            <mvc:mapping path="/showpost/**"/>
             <!--不拦截登录页和登录的请求-->
             <mvc:exclude-mapping path="/"/>
             <mvc:exclude-mapping path="/login"/>

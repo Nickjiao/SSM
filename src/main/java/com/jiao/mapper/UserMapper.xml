@@ -18,6 +18,7 @@
         	<result column="title"      property="_title"      jdbcType="VARCHAR" /> 
 		</collection>
     </resultMap>  
+    
     <!-- 查询单条记录 -->  
     <select id="selectUserById" parameterType="int" resultMap="BaseResultMap">  
         SELECT * FROM userinf WHERE userid = #{userId}  
@@ -28,6 +29,16 @@
     </select>  
     
     <select id="selectPostById" parameterType="int" resultMap="BaseResultMap">
-    	SELECT * FROM userinf u,post p WHERE (u.userid=p.uid) AND (u.userid=#{userId})
+    	SELECT * FROM userinf u 
+    		INNER JOIN post p ON (u.userid=p.uid)
+    		LEFT JOIN reply r ON (p.uid=r.uid)
+    	WHERE (u.userid=#{userId})
     </select>
+    
+    <!-- 添加新用户 -->
+    <insert id="addNewUser">
+    	INSERT INTO userinf(username,pwd,useremail) 
+    		values(#{name,jdbcType=VARCHAR},
+    		#{pwd,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR})
+    </insert>
 </mapper>  

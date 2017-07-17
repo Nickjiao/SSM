@@ -29,9 +29,10 @@
 <div id="header">
 <div class="banner" style="padding-left:5px;"><a href="http://www.baidu.com"><font size="7" color="blue"><b>众生相社区</b></font></a></div>
 <div class="h guide" colspan="2">&#187;
-    <%		Object st = session.getAttribute("isLogin");
-    		if (st != null && st.equals(true)) {%>
-            	<!--mb--> 欢迎 <!--mbend-->
+    <%		Object st = session.getValue("isLogin");
+     		boolean state = CookieUtil.isLogin(request);
+    		if (state == true || (st !=null && st.equals(true))) {%>
+            	<!--mb--> 欢迎${requestScope.username} <!--mbend-->
             	<a href="http://www.baidu.com">帮助</a>
             	| <a href="${pageContext.request.contextPath}/download">下载文件</a>
             	| <a href="${pageContext.request.contextPath}/uploadOneFile">上传单个文件</a>

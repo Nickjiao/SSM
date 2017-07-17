@@ -1,5 +1,8 @@
 package com.jiao.handleCookie;
 
+import java.util.Date;
+import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,17 +46,20 @@ public class CookieUtil {
         return value;
     }
     
-    public static boolean isLogin(HttpServletRequest request,
-    		String cookieName) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookieName.equals(cookie.getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+    public static boolean isLogin(HttpServletRequest request) {
+    	//拿到cookie
+        //也就是获取session里的登录状态值
+      String cookie= CookieUtil.getValByName(request,"isLoginSSM");
+      if (cookie!=null){
+      //session解密
+          Map<String,Object> map= AuthUtil.decodeSession(cookie);
+          String loginStatus= (String) map.get("isLoginSSM");
+          Long timestamp= (Long) map.get("timestamp");
+          if (loginStatus!=null&&timestamp!=null&&new Date().getTime()-timestamp<1000*60*60*24*10){
+              return true;
+          }
+      }
+      return false;
+  }
 
 }

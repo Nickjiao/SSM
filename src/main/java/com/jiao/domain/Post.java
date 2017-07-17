@@ -1,5 +1,6 @@
 package com.jiao.domain;
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Post {
 	private Integer _pid;
@@ -9,6 +10,7 @@ public class Post {
 	private byte[] _content;
 	private String _title;
 	private User user;
+	private List<Reply> replys;
 	
 	public Integer get_pid() {
 		return _pid;
@@ -51,6 +53,12 @@ public class Post {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public List<Reply> getReplys() {
+		return replys;
+	}
+	public void setReplys(List<Reply> replys) {
+		this.replys = replys;
 	}
 	
 }

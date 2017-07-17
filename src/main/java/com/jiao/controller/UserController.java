@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,10 +40,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.jiao.domain.Post;
+import com.jiao.domain.Reply;
 import com.jiao.domain.User;
 import com.jiao.handleCookie.CookieUtil;
 import com.jiao.handleCookie.JavaWebToken;
 import com.jiao.service.PostService;
+import com.jiao.service.ReplyServiceImpl;
 import com.jiao.service.UserService;
 
 @Controller  
@@ -50,13 +54,13 @@ public class UserController {
     private UserService userService;  
     @Autowired
     private PostService postService;
+    @Autowired
+    private ReplyServiceImpl replyService;
     
     @RequestMapping("/")
-    public ModelAndView getIndex(HttpServletRequest req,
-    		HttpServletResponse response){      
+    public ModelAndView getWelfile(HttpServletRequest req,
+    		HttpServletResponse response){ 
         ModelAndView mav = new ModelAndView("index");   
-        User user = userService.selectUserById(1);  
-        mav.addObject("user", user);
         return mav;    
     }   
     
@@ -67,14 +71,29 @@ public class UserController {
     
     @RequestMapping("/register")
     public String register(){      
-        return "register";    
+        return "register";
     } 
-
-    @RequestMapping("/check")
-    public ModelAndView check(String username,
+    
+    @RequestMapping("/regPos")
+    public void reg(String username,
+    		String email,
     		String password,
     		HttpServletRequest req,
+    		HttpServletResponse response) {
+    		userService.addNewUser(username, password, email);
+    	try {
+			req.getRequestDispatcher("/check").forward(req, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    @RequestMapping("/check")
+    public void check(HttpServletRequest req,
     		HttpServletResponse response){ 
+    	String username = req.getParameter("username");
+    	String password = req.getParameter("password");
     	if(userService.selectIdByNamePwd(username,password) != null) {
     		//核对成功
         	Map<String, Object> loginInfo = new HashMap<>();
@@ -82,7 +101,6 @@ public class UserController {
             loginInfo.put("timestamp", new Date());
             String sessionId = JavaWebToken.createJavaWebToken(loginInfo);//token机制，详情请看上文所说的文章
             CookieUtil.addCookie(response,"isLoginSSM",sessionId);//加cookie
-            ModelAndView mav = new ModelAndView("index");
             HttpSession se = req.getSession();
             se.setAttribute("isLogin", true);
             int userId = userService.selectIdByNamePwd(username,password);
@@ -90,12 +108,21 @@ public class UserController {
             cookie.setPath("/");
     		cookie.setMaxAge(60 * 60 * 1 * 1);
             response.addCookie(cookie);
-            return mav;
+            req.getSession().setAttribute("isLogin", true);
+            try {
+				req.getRequestDispatcher("/").forward(req, response);
+			} catch (ServletException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}else {
-    		 ModelAndView mav = new ModelAndView("login");  
-    		 return mav;
+    		try {
+				req.getRequestDispatcher("/login").forward(req, response);
+			} catch (ServletException | IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
     	}
-    	
     } 
     
     @RequestMapping("/tectalk")
@@ -103,6 +130,7 @@ public class UserController {
     	model.addAttribute("date",new Date(System.currentTimeMillis()));
     	String title = "title_",
     			author = "author_",
+    			pid = "pid_",
     			clicknum = "clicknum",
     			replynum = "replynum",
     			lastreplydate = "lastreplydate";
@@ -110,6 +138,7 @@ public class UserController {
     	for(int i = 0;i < postContent.size();i++) {
     		User user = userService.selectUserById(postContent.get(i).get_userpid());  
     		String s = String.valueOf(i+1);
+    		model.addAttribute(pid+s,postContent.get(i).get_pid());
     		model.addAttribute(title+s,postContent.get(i).get_title());
         	model.addAttribute(author+s,user.getUserName());
         	model.addAttribute(clicknum+s,"dsg");
@@ -264,13 +293,43 @@ public class UserController {
 		return model;
     }
     
-    @RequestMapping(value="/showpost/#{bypid}")
-    public ModelAndView showpostByPid(int pid) {
-    	ModelAndView model = new ModelAndView("showpost");
-    	Post post = postService.selectPostByid(pid);
-    	model.addObject("title",post.get_title());
+    @RequestMapping(value="/showpost/bytitle/{id}")
+    public String showpostByPid(@PathVariable String id,
+    		Model model) {
+    	Post post = postService.selectPostBypid(Integer.parseInt(id));
+    	if(post == null) return "tectalk";
+    	model.addAttribute("title",post.get_title());
+    	Integer pid = post.get_pid();
+    	model.addAttribute("pid",pid);
     	String cont = new String(post.get_content());
-    	model.addObject("content",cont);
-		return model;
+    	model.addAttribute("content",cont);
+    	List<Reply> replys = post.getReplys();
+    	int replyNum = replys.size();
+    	model.addAttribute("replyNum",replyNum);
+    	List<String> rt = new ArrayList<String>();
+    	for(int i = 0;i < replyNum;i++) {
+    		rt.add(new String(replys.get(i).get_content()));
+    	}
+    	model.addAttribute("replys",rt);
+		return "showpost";
+    }
+    
+    @RequestMapping(value="/UeditorReply")
+    public void addReply(HttpServletRequest request,
+    		HttpServletResponse response) {
+    	String content = request.getParameter("content");
+    	byte[] cont = content.getBytes();
+    	String pid = request.getParameter("pid");
+    	Integer pidValue = Integer.parseInt(pid);
+    	Post post = postService.selectPostBypid(pidValue);
+    	String title = request.getParameter("title");
+    	Integer uid = post.get_userpid();
+    	replyService.addNewReply(uid, pidValue, cont);
+    	try {
+			request.getRequestDispatcher("showpost/bytitle/"+pid).forward(request, response);
+		} catch (ServletException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }  

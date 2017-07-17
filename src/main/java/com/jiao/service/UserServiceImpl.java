@@ -32,6 +32,13 @@ public class UserServiceImpl implements UserService{
 	public User selectPostById(Integer userId) {
 		// TODO Auto-generated method stub
 		return userDao.selectPostById(userId);
-	} 
-  
+	}
+
+	@Override
+	public void addNewUser(@Param("name") String userName,
+    		@Param("pwd") String userPwd,
+    		@Param("email") String userEmail) {
+		userDao.addNewUser(userName, userPwd, userEmail);
+	}
+
 }  

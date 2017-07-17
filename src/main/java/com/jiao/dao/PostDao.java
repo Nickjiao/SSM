@@ -18,4 +18,8 @@ public interface PostDao {
 			@Param("ttl")String    ttl);
 	
 	Post selectPostByid(int id);
+	
+	Post selectPostBytitle(String ttl);
+	
+	Post selectPostBypid(Integer id);
 }

@@ -26,4 +26,8 @@ public interface UserDao {
     
     public Integer selectIdByNamePwd(@Param("name") String userName,
     		@Param("pd") String userPwd);
+    
+    public void addNewUser(@Param("name") String userName,
+    		@Param("pwd") String userPwd,
+    		@Param("email") String userEmail);
 }

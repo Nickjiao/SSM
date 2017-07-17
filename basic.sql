@@ -17,7 +17,7 @@ CREATE TABLE post(
     uid int not null,
     cretime timestamp default CURRENT_TIMESTAMP,
     contentdep blob null, 
-    content text null,
+    content mediumblob null,
     title varchar(100) not null,
     primary key (pid));
     
@@ -26,5 +26,11 @@ CREATE TABLE post(
     (2,0,'今日媒体'),
     (3,0,'今日头条');
     
-    
-update post set content='薛甄珠女士的浮夸做作，却又看点十足的表演，你注意了没？' where pid=0;
+CREATE TABLE reply(
+	rid int auto_increment not null,
+    uid int not null,
+    pid int not null,
+    cretime timestamp default CURRENT_TIMESTAMP,
+    content blob null,
+    primary key (rid)
+);

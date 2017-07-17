@@ -112,20 +112,15 @@
       <form method="post" action="${pageContext.request.contextPath}/regPos" name="contactform" id="contactform">
         <div class="col-md-6">
           <fieldset>
-            <input name="name" type="text" id="name" size="30" placeholder="Name">
+            <input name="username" type="text" id="name" size="30" placeholder="Name" required autofocus >
             <br>
-            <input name="email" type="text" id="email" size="30" placeholder="Email">
+            <input name="email" type="text" id="email" size="30" placeholder="Email" required>
             <br>
-            <input name="phone" type="text" id="phone" size="30" placeholder="Phone">
-            <br>
-            <input name="human" type="text" id="human" size="30" placeholder="Prove your not a robot... What is 2+2?">
+            <input name="password" type="password" id="pwd" size="30" placeholder="Password" required>
             <br>
           </fieldset>
         </div>
         <div class="col-md-6">
-          <fieldset>
-            <textarea name="comments" cols="40" rows="20" id="comments" placeholder="Message"></textarea>
-          </fieldset>
         </div>
         <div class="col-md-12">
           <fieldset>

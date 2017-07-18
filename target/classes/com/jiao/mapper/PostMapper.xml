@@ -3,52 +3,72 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
 <mapper namespace="com.jiao.dao.PostDao">
     <resultMap id="PostResultMap" type="com.jiao.domain.Post">
-            <id     column="pid"        property="_pid"        jdbcType="INTEGER"/> 
-			<result column="uid"        property="_userid"     jdbcType="INTEGER" />  
-        	<result column="cretime"    property="_cretime"    jdbcType="TIMESTAMP" />  
-        	<result column="contentdep" property="_contentdep" jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/> 
-        	<result column="content"    property="_content"    jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/> 
-        	<result column="title"      property="_title"      jdbcType="VARCHAR" javaType="String"/> 
+            	<id     column="post_id"         property="post_Id"       	jdbcType="INTEGER"/>
+				<result column="post_uid"        property="post_Uid"     	jdbcType="INTEGER" />
+        		<result column="post_cretime"    property="post_Cretime"    jdbcType="TIMESTAMP" />
+        		<result column="post_content" 	 property="post_Content" 	jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+        		<result column="post_title"      property="post_Title"  	jdbcType="VARCHAR"/>
+        		<result column="post_clicknum"   property="post_ClickNum"  	jdbcType="INTEGER"/>
         	<association property="user" javaType="com.jiao.domain.User">
-        		<id     column="userid" 	property="userId" 			jdbcType="INTEGER" />  
-        		<result column="username" 	property="userName" 		jdbcType="VARCHAR" />  
-        		<result column="pwd" 		property="userPassword" 	jdbcType="VARCHAR" />  
-        		<result column="useremail" 	property="userEmail" 		jdbcType="VARCHAR" /> 
-        		<result column="regtime" 	property="userRegtimestamp" jdbcType="TIMESTAMP" /> 
+        		<id     column="user_id" 		property="user_Id" 		jdbcType="INTEGER" />  
+        		<result column="user_name" 		property="user_Name" 	jdbcType="VARCHAR" />  
+        		<result column="user_email" 	property="user_Email" 	jdbcType="VARCHAR" />  
+        		<result column="user_pwd" 		property="user_Pwd" 	jdbcType="VARCHAR" /> 
+        		<result column="user_regtime" 	property="user_Regtime" jdbcType="TIMESTAMP" />
         	</association>
         	<collection property="replys" ofType="com.jiao.domain.Reply" javaType="ArrayList">
-        		<id     column="rid"        property="_rid"         jdbcType="INTEGER"/> 
-				<result column="pid"        property="_pid"     	jdbcType="INTEGER" />  
-        		<result column="uid"    	property="_uid"    		jdbcType="INTEGER" />  
-        		<result column="cretime" 	property="_cretime" 	jdbcType="TIMESTAMP"/> 
-        		<result column="content"    property="_content"     jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+        		<id     column="reply_id"         property="reply_Id"       jdbcType="INTEGER"/>
+				<result column="reply_uid"        property="reply_Uid"     	jdbcType="INTEGER" />
+				<result column="reply_uname"      property="reply_Uname"    jdbcType="VARCHAR" />
+        		<result column="reply_pid"    	  property="reply_Pid"    	jdbcType="INTEGER" />
+        		<result column="reply_cretime" 	  property="reply_Cretime" 	jdbcType="TIMESTAMP"/>
+        		<result column="reply_content"    property="reply_Content"  jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
         	</collection>
     </resultMap>  
     
     <!-- 单个帖子 -->
     <select id="selectPostByid" resultMap="PostResultMap">  
-        SELECT * FROM post WHERE uid=#{id}
+        SELECT * FROM post WHERE post_uid=#{id}
     </select>
 
     <!-- 查询前十个帖子 --> 
     <select id="selectFirstTenPost" resultMap="PostResultMap">  
         SELECT * FROM post LIMIT 10
     </select>
-
+    
+    <!-- 查询十个帖子 --> 
+    <select id="selectTenPost" resultMap="PostResultMap">
+        SELECT * FROM post p 
+        INNER JOIN user u ON p.post_uid=u.user_id
+        LEFT JOIN reply r ON p.post_id=r.reply_pid
+        LIMIT #{start},10
+    </select>
+    
+    <!-- 查询帖子数量 --> 
+	<select id="selectPostNum" resultType="Integer">
+        SELECT COUNT(*) FROM post
+    </select>
+    
     <!-- 根据title联合查询 --> 
     <select id="selectPostBytitle" resultMap="PostResultMap">  
-        SELECT * FROM post p LEFT JOIN reply r ON (p.pid=r.pid)
-        WHERE p.title=#{ttl}
+        SELECT * FROM post p LEFT JOIN reply r ON (p.post_id=r.reply_pid)
+        WHERE p.post_title=#{ttl}
     </select>
         
     <select id="selectPostBypid" resultMap="PostResultMap">
-    	SELECT * FROM post p INNER JOIN reply r ON p.pid=r.pid
-    	WHERE p.pid=#{id}
+    	SELECT * FROM post p LEFT JOIN reply r ON p.post_id=r.reply_pid
+    	WHERE p.post_id=#{id}
     </select>
     
-        <insert id="addNewPost">
-    	INSERT INTO post(uid,contentdep,content,title) 
-    		values(#{userid,jdbcType=INTEGER},#{contdep,jdbcType=BLOB},
+    <insert id="addNewPost">
+    	INSERT INTO post(post_uid,post_content,post_title)
+    		values(#{userid,jdbcType=INTEGER},
     		#{cont,jdbcType=BLOB},#{ttl,jdbcType=VARCHAR})
     </insert>
+    
+    <!-- 更新帖子查看记录 -->
+    <update id="updatePostWth">  
+        UPDATE post SET post_clicknum=#{num,jdbcType=INTEGER}+1 
+        	WHERE post_id=#{id,jdbcType=INTEGER}
+    </update>
 </mapper>

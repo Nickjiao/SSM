@@ -13,7 +13,6 @@ public interface PostDao {
 	
 	void addNewPost(
 			@Param("userid") Integer   userid,
-			@Param("contdep")byte[]    contdep,
 			@Param("cont")byte[]    cont,
 			@Param("ttl")String    ttl);
 	
@@ -22,4 +21,11 @@ public interface PostDao {
 	Post selectPostBytitle(String ttl);
 	
 	Post selectPostBypid(Integer id);
+	
+	List<Post> selectTenPost(Integer start);
+	
+	Integer selectPostNum();
+	
+	void updatePostWth(@Param("id") Integer id,
+			@Param("num") Integer   num);
 }

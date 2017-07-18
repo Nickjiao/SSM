@@ -2,66 +2,47 @@ package com.jiao.domain;
 import java.util.List;
 
 public class User {  
-    private Integer userId;  
-    private String userName;  
-    private String userPassword;  
-    private String userEmail;  
-    private String userRegtimestamp;  
+    private Integer user_Id;  
+    private String user_Name;  
+    private String user_Pwd;  
+    private String user_Email;  
+    private String user_Regtime;  
     private List<Post> posts;
-    
-    public Integer getUserId() {  
-        return userId;  
-    }  
-  
-    public void setUserId(Integer userId) {  
-        this.userId = userId;  
-    }  
-  
-    public String getUserName() {  
-        return userName;  
-    }  
-  
-    public void setUserName(String userName) {  
-        this.userName = userName;  
-    }  
-  
-    public String getUserPassword() {  
-        return userPassword;  
-    }  
-  
-    public void setUserPassword(String userPassword) {  
-        this.userPassword = userPassword;  
-    }  
-  
-    public String getUserEmail() {  
-        return userEmail;  
-    }  
-  
-    public void setUserEmail(String userEmail) {  
-        this.userEmail = userEmail;  
-    }  
-  
-    @Override  
-    public String toString() {  
-        return "User [userId=" + userId + ", userName=" + userName  
-                + ", userPassword=" + userPassword + ", userEmail=" + userEmail  
-                + "]";  
-    }
-
-	public String getUserRegtimestamp() {
-		return userRegtimestamp;
+	public Integer getUser_Id() {
+		return user_Id;
 	}
-
-	public void setUserRegtimestamp(String userRegtimestamp) {
-		this.userRegtimestamp = userRegtimestamp;
+	public void setUser_Id(Integer user_Id) {
+		this.user_Id = user_Id;
 	}
-
+	public String getUser_Name() {
+		return user_Name;
+	}
+	public void setUser_Name(String user_Name) {
+		this.user_Name = user_Name;
+	}
+	public String getUser_Pwd() {
+		return user_Pwd;
+	}
+	public void setUser_Pwd(String user_Pwd) {
+		this.user_Pwd = user_Pwd;
+	}
+	public String getUser_Regtime() {
+		return user_Regtime;
+	}
+	public void setUser_Regtime(String user_Regtime) {
+		this.user_Regtime = user_Regtime;
+	}
+	public String getUser_Email() {
+		return user_Email;
+	}
+	public void setUser_Email(String user_Email) {
+		this.user_Email = user_Email;
+	}
 	public List<Post> getPosts() {
 		return posts;
 	}
-
 	public void setPosts(List<Post> posts) {
 		this.posts = posts;
-	}  
-      
+	}
+
 }  

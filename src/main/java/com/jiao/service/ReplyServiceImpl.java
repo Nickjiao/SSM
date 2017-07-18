@@ -2,6 +2,7 @@ package com.jiao.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ public class ReplyServiceImpl implements ReplyService{
 	private ReplyDao replyDao;
 	
 	@Override
-	public void addNewReply(Integer uid, Integer pid, byte[] cont) {
-		// TODO Auto-generated method stub
-		replyDao.addNewReply(uid, pid, cont);
+	public void addNewReply(@Param("uid") Integer uid,
+			@Param("uname")String uname,
+			@Param("pid")  Integer pid,
+			@Param("cont") byte[] cont) {
+		replyDao.addNewReply(uid, uname, pid, cont);
 	}
 
 	@Override

@@ -30,4 +30,6 @@ public interface UserDao {
     public void addNewUser(@Param("name") String userName,
     		@Param("pwd") String userPwd,
     		@Param("email") String userEmail);
+    
+    public String selectUserNameById(Integer userId);
 }

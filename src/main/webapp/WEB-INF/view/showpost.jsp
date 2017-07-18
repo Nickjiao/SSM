@@ -13,7 +13,7 @@
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
     <script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/ueditor/lang/zh-cn/zh-cn.js"></script>
-
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css" type="text/css"/>
     <style type="text/css">
         div{
             width:100%;
@@ -23,14 +23,38 @@
         	margin:auto;
         	font-family:Microsoft YaHei;
         }
+        #txtar{
+        	border: medium double rgb(100,100,100);
+        	background:#EEE9E9;
+        	width:100%;
+        }
+        #image{
+        	border-radius:5px;
+        }
     </style>
 </head>
-<body style="background:#F4FBFF;">
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<ul class="breadcrumb">
+				<li>
+					 <a style="font-size:15px" href="${pageContext.request.contextPath}/">Home</a>
+				</li>
+				<li style="font-size:15px" class="active">
+					Talk
+				</li>
+			</ul>
+	<div class="row clearfix">
+				<div class="col-md-3 column">
+					<p><img class="img-circle"
+						src="${pageContext.request.contextPath}/images/user/man.png" />
+					</p>
+				</div>
+				<div class="col-md-9 column">
+				
     <div id="header">
         <h1 style="text-align:center;">${requestScope.title}</h1><br/>
-        <c:forEach  var="reply" items="${requestScope.replys}" varStatus="status">
-        		<tr><td>${reply}</td></tr>
-        	</c:forEach >
+
         <div>${requestScope.content}</div>
         <form action="${pageContext.request.contextPath}/UeditorReply" method="post">
         	<input type="hidden" name=pid   value=${requestScope.pid}></input>
@@ -53,9 +77,18 @@
         </script>   
         	<input type="submit" value="回复"/>
         </form>
-        <table>
-        	
-        </table>
+        	<c:forEach  var="reply" items="${requestScope.replys}" varStatus="status">
+        		<br/>
+        		<table id="txtar">
+        		<tr><td>${reply.reply_Uname}</td></tr>
+        		<tr style="text-align:center;"><td>${reply.reply_Content}</td></tr>
+        		</table>
+        	</c:forEach >
+    </div>
+    </div>
+	</div>
+    </div>
+    </div>
     </div>
 </body>
 </html>

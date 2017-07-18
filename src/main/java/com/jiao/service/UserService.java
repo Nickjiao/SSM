@@ -21,4 +21,6 @@ public interface UserService {
     void addNewUser(@Param("name") String userName,
     		@Param("pwd") String userPwd,
     		@Param("email") String userEmail);
+    
+    String selectUserNameById(Integer userId);
 }  

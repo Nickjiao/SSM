@@ -101,7 +101,7 @@
 
 	<tr class="tr3 f_one">
 		<td class="icon tac" width="4%"><a href="http://www.baidu.com" target="_blank">.:.</a></td>
-		<th><a href="http://www.baidu.com" target="_blank"></a><h2><a href="${pageContext.request.contextPath}/tectalk">技术讨论区</a></h2>
+		<th><a href="http://www.baidu.com" target="_blank"></a><h2><a href="${pageContext.request.contextPath}/tectalk/page/0">学术讨论区</a></h2>
 
 		<br><span class="smalltxt gray">科研探讨 编程珠玑 经验分享</span>
 

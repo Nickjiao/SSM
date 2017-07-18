@@ -24,7 +24,7 @@
         <!-- 配置登陆拦截器 -->
         <mvc:interceptor>
             <!--拦截后台页面的请求-->
-            <mvc:mapping path="/tectalk"/>
+            <mvc:mapping path="/tectalk/page/**"/>
             <mvc:mapping path="/post"/>
             <mvc:mapping path="/UeditorPost"/>
             <mvc:mapping path="/showpost/**"/>

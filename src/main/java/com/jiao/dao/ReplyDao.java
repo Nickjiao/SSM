@@ -10,6 +10,7 @@ import com.jiao.domain.Reply;
 @Repository  
 public interface ReplyDao {
 	void addNewReply(@Param("uid") Integer uid,
+			@Param("uname")String uname,
 			@Param("pid")  Integer pid,
 			@Param("cont") byte[] cont);
 	

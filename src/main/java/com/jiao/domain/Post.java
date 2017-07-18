@@ -3,56 +3,37 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class Post {
-	private Integer _pid;
-	private Integer _userid;
-	private Timestamp _cretime;
-	private byte[] _contentdep;
-	private byte[] _content;
-	private String _title;
+	public Integer post_Id;
+	private Integer post_Uid;
+	private Timestamp post_Cretime;
+	public byte[] post_Content;
+	public String post_Title;
 	private User user;
 	private List<Reply> replys;
-	
-	public Integer get_pid() {
-		return _pid;
+	private Integer post_ClickNum;
+	public Integer getPost_Id() {
+		return post_Id;
 	}
-	public void set_pid(Integer _pid) {
-		this._pid = _pid;
+	public void setPost_Id(Integer post_Id) {
+		this.post_Id = post_Id;
 	}
-	public Integer get_userpid() {
-		return _userid;
+	public Integer getPost_Uid() {
+		return post_Uid;
 	}
-	public void set_userpid(Integer _userid) {
-		this._userid = _userid;
+	public void setPost_Uid(Integer post_Uid) {
+		this.post_Uid = post_Uid;
 	}
-	public Timestamp get_cretime() {
-		return _cretime;
+	public Timestamp getPost_Cretime() {
+		return post_Cretime;
 	}
-	public void set_cretime(Timestamp _cretime) {
-		this._cretime = _cretime;
+	public void setPost_Cretime(Timestamp post_Cretime) {
+		this.post_Cretime = post_Cretime;
 	}
-	public byte[] get_contentdep() {
-		return _contentdep;
+	public byte[] getPost_Content() {
+		return post_Content;
 	}
-	public void set_contentdep(byte[] _contentdep) {
-		this._contentdep = _contentdep;
-	}
-	public byte[] get_content() {
-		return _content;
-	}
-	public void set_content(byte[] _content) {
-		this._content = _content;
-	}
-	public String get_title() {
-		return _title;
-	}
-	public void set_title(String _title) {
-		this._title = _title;
-	}
-	public User getUser() {
-		return user;
-	}
-	public void setUser(User user) {
-		this.user = user;
+	public void setPost_Content(byte[] post_Content) {
+		this.post_Content = post_Content;
 	}
 	public List<Reply> getReplys() {
 		return replys;
@@ -60,5 +41,24 @@ public class Post {
 	public void setReplys(List<Reply> replys) {
 		this.replys = replys;
 	}
+	public String getPost_Title() {
+		return post_Title;
+	}
+	public void setPost_Title(String post_Title) {
+		this.post_Title = post_Title;
+	}
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+	public Integer getPost_ClickNum() {
+		return post_ClickNum;
+	}
+	public void setPost_ClickNum(Integer post_ClickNum) {
+		this.post_ClickNum = post_ClickNum;
+	}
+
 	
 }

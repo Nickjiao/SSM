@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>    
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"    
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
-<mapper namespace="com.jiao.dao.UserDao">  
+<mapper namespace="com.jiao.dao.UserDao">
 <!--设置domain类和数据库中表的字段一一对应，注意数据库字段和domain类中的字段名称不致，此处一定要！-->  
-    <resultMap id="BaseResultMap" type="com.jiao.domain.User">
-        <id     column="userid" property="userId" jdbcType="INTEGER" />  
-        <result column="username" property="userName" jdbcType="VARCHAR" />  
-        <result column="pwd" property="userPassword" jdbcType="VARCHAR" />  
-        <result column="useremail" property="userEmail" jdbcType="VARCHAR" /> 
-        <result column="regtime" property="userRegtimestamp" jdbcType="TIMESTAMP" /> 
-        <collection property="posts" ofType="com.jiao.domain.Post" column="userid">
-			<id     column="pid"        property="_pid"        jdbcType="INTEGER"/> 
-			<result column="uid"        property="_userid"     jdbcType="INTEGER" />  
-        	<result column="cretime"    property="_cretime"    jdbcType="TIMESTAMP" />  
-        	<result column="contentdep" property="_contentdep" jdbcType="BLOB" /> 
-        	<result column="content"    property="_content"    jdbcType="BLOB" /> 
-        	<result column="title"      property="_title"      jdbcType="VARCHAR" /> 
+    <resultMap id="UserResultMap" type="com.jiao.domain.User">
+        	<id     column="user_id" 		property="user_Id" 		jdbcType="INTEGER" />  
+        	<result column="user_name" 		property="user_Name" 	jdbcType="VARCHAR" />  
+        	<result column="user_email" 	property="user_Email" 	jdbcType="VARCHAR" />  
+        	<result column="user_pwd" 		property="user_Pwd" 	jdbcType="VARCHAR" /> 
+        	<result column="user_regtime" 	property="user_Regtime" jdbcType="TIMESTAMP" />
+        <collection property="posts" ofType="com.jiao.domain.Post" column="user_id">
+			<id     column="post_id"         property="post_Id"       	jdbcType="INTEGER"/>
+			<result column="post_uid"        property="post_Uid"     	jdbcType="INTEGER" />
+        	<result column="post_cretime"    property="post_Cretime"    jdbcType="TIMESTAMP" />
+        	<result column="post_content" 	 property="post_Content" 	jdbcType="BLOB"  typeHandler="org.apache.ibatis.type.BlobTypeHandler"/>
+        	<result column="post_title"      property="post_Title"  	jdbcType="VARCHAR"/>
+        	<result column="post_clickNum"   property="post_ClickNum"  	jdbcType="INTEGER"/>
 		</collection>
     </resultMap>  
     
     <!-- 查询单条记录 -->  
-    <select id="selectUserById" parameterType="int" resultMap="BaseResultMap">  
-        SELECT * FROM userinf WHERE userid = #{userId}  
+    <select id="selectUserById" parameterType="int" resultMap="UserResultMap">  
+        SELECT user_name FROM user WHERE user_id = #{userId}
+    </select>  
+    
+    <select id="selectUserNameById" parameterType="int" resultType="String">  
+        SELECT * FROM user WHERE user_id = #{userId}
     </select>  
     
     <select id="selectIdByNamePwd" resultType="Integer">  
-        SELECT userid FROM userinf WHERE username = #{name,jdbcType=VARCHAR} AND pwd = #{pd,jdbcType=VARCHAR}  
+        SELECT user_id FROM user WHERE user_name = #{name,jdbcType=VARCHAR} AND user_pwd = #{pd,jdbcType=VARCHAR}  
     </select>  
     
-    <select id="selectPostById" parameterType="int" resultMap="BaseResultMap">
-    	SELECT * FROM userinf u 
-    		INNER JOIN post p ON (u.userid=p.uid)
-    		LEFT JOIN reply r ON (p.uid=r.uid)
-    	WHERE (u.userid=#{userId})
+    <select id="selectPostById" parameterType="int" resultMap="UserResultMap">
+    	SELECT * FROM user u 
+    		INNER JOIN post p ON (u.user_id=p.post_uid)
+    		LEFT JOIN reply r ON (p.post_uid=r.reply_uid)
+    	WHERE (u.user_id=#{userId})
     </select>
     
     <!-- 添加新用户 -->
     <insert id="addNewUser">
-    	INSERT INTO userinf(username,pwd,useremail) 
+    	INSERT INTO user(user_name,user_pwd,user_email) 
     		values(#{name,jdbcType=VARCHAR},
     		#{pwd,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR})
     </insert>

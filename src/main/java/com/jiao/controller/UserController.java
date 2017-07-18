@@ -8,13 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,18 +27,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.jiao.common.ShowContent;
 import com.jiao.domain.Post;
 import com.jiao.domain.Reply;
-import com.jiao.domain.User;
 import com.jiao.handleCookie.CookieUtil;
 import com.jiao.handleCookie.JavaWebToken;
 import com.jiao.service.PostService;
@@ -125,33 +120,61 @@ public class UserController {
     	}
     } 
     
-    @RequestMapping("/tectalk")
-    public String tectalk(Model model){  
+    @RequestMapping("/tectalk/page/{index}")
+    public String tectalk(@PathVariable Integer index,
+    		Model model){  
     	model.addAttribute("date",new Date(System.currentTimeMillis()));
-    	String title = "title_",
-    			author = "author_",
-    			pid = "pid_",
-    			clicknum = "clicknum",
-    			replynum = "replynum",
-    			lastreplydate = "lastreplydate";
-    	List<Post> postContent = postService.selectFirstTenPost();
-    	for(int i = 0;i < postContent.size();i++) {
-    		User user = userService.selectUserById(postContent.get(i).get_userpid());  
-    		String s = String.valueOf(i+1);
-    		model.addAttribute(pid+s,postContent.get(i).get_pid());
-    		model.addAttribute(title+s,postContent.get(i).get_title());
-        	model.addAttribute(author+s,user.getUserName());
-        	model.addAttribute(clicknum+s,"dsg");
-        	model.addAttribute(replynum+s,"dsg");
-        	model.addAttribute(lastreplydate+s,"dsg");
+    	Integer postNum = postService.selectPostNum();
+    	Integer pageNum;
+    	if(postNum%10 == 0)
+    		pageNum = postNum/10;
+    	else
+    		pageNum = postNum/10+1;
+    	if(postNum < index*10) 
+    		return "tectalk";
+    	List<Post> postContent = postService.selectTenPost(index);
+    	List<ShowContent> showCont = new ArrayList<ShowContent>();
+    	for(Post p:postContent) {
+    		Integer repNum = p.getReplys().size();
+    		Integer clkNum = p.getPost_ClickNum();
+    		if(clkNum == null)
+    			clkNum = 0;
+    		if(repNum == 0) {
+    			showCont.add(new ShowContent(p.getPost_Title(),
+        				p.getUser().getUser_Name(),
+        				clkNum,
+        				repNum,
+        				"2000-2-30 23:59:59:59",
+        				p.getPost_Id()));
+    		}else {
+    			showCont.add(new ShowContent(p.getPost_Title(),
+        				p.getUser().getUser_Name(),
+        				clkNum,
+        				repNum,
+        				p.getReplys().get(repNum-1).getReply_Cretime().toString(),
+        				p.getPost_Id()));
+    		}
+    		
     	}
+    	model.addAttribute("showCont",showCont);
+    	model.addAttribute("index",index);
+    	model.addAttribute("pageNum",pageNum);
         return "tectalk";
     } 
     
     // Download One File.
     @RequestMapping(value = "/download")
-    public String doDownload() {
+    public String doDownload(Model model) {
         // Forward to "/WEB-INF/pages/uploadOneFile.jsp".
+    	File path = new File("E:\\SSM\\upload");
+    	File[] files = path.listFiles();
+    	Map<String,String> fileName = new HashMap<String,String>();
+    	for(File file:files) {
+    		if(file.isDirectory() == false) {
+    			fileName.put(file.getName().substring(0,file.getName().lastIndexOf(".")),file.getName());
+    		}
+    	}
+    	model.addAttribute("fileName",fileName);
         return "download";
     }
     
@@ -215,7 +238,7 @@ public class UserController {
         return "uploadResult";
     }
     
-	private static final String EXTERNAL_FILE_PATH="E:\\SSM\\upload\\pom.xml";
+    private static final String EXTERNAL_FILE_PATH="E:\\SSM\\upload";
     @RequestMapping(value="/download/{type}", method = RequestMethod.GET)
 	public void downloadFile(HttpServletResponse response, @PathVariable("type") String type) throws IOException {
 	
@@ -223,7 +246,19 @@ public class UserController {
 		
 		file = new File(EXTERNAL_FILE_PATH);
 		
-		if(!file.exists()){
+		String[] files = file.list();
+		
+		boolean flag = false;
+		
+		for(String f:files) {
+			if(f.substring(0,f.lastIndexOf(".")).matches(type)) {
+				file = new File(EXTERNAL_FILE_PATH+"\\"+f);
+				flag = true;
+				break;
+			}
+		}
+		
+		if(!flag){
 			String errorMessage = "Sorry. The file you are looking for does not exist";
 			System.out.println(errorMessage);
 			OutputStream outputStream = response.getOutputStream();
@@ -274,7 +309,7 @@ public class UserController {
     		if(c.getName().equals("userid")) {
     			userId = c.getValue();
     			uid = Integer.parseInt(userId);
-    			postService.addNewPost(uid, null, cont, ttl);
+    			postService.addNewPost(uid, cont, ttl);
     			try {
 					request.getRequestDispatcher("showpost").forward(request, response);
 				} catch (ServletException | IOException e) {
@@ -297,18 +332,22 @@ public class UserController {
     public String showpostByPid(@PathVariable String id,
     		Model model) {
     	Post post = postService.selectPostBypid(Integer.parseInt(id));
+    	if(post.getPost_ClickNum() == null)
+    		postService.updatePostWth(Integer.parseInt(id),0);
+    	else
+    		postService.updatePostWth(Integer.parseInt(id),post.getPost_ClickNum());
     	if(post == null) return "tectalk";
-    	model.addAttribute("title",post.get_title());
-    	Integer pid = post.get_pid();
+    	model.addAttribute("title",post.getPost_Title());
+    	Integer pid = post.getPost_Id();
     	model.addAttribute("pid",pid);
-    	String cont = new String(post.get_content());
+    	String cont = new String(post.getPost_Content());
     	model.addAttribute("content",cont);
     	List<Reply> replys = post.getReplys();
     	int replyNum = replys.size();
     	model.addAttribute("replyNum",replyNum);
     	List<String> rt = new ArrayList<String>();
     	for(int i = 0;i < replyNum;i++) {
-    		rt.add(new String(replys.get(i).get_content()));
+    		rt.add(new String(replys.get(i).getReply_Content()));
     	}
     	model.addAttribute("replys",rt);
 		return "showpost";
@@ -323,8 +362,9 @@ public class UserController {
     	Integer pidValue = Integer.parseInt(pid);
     	Post post = postService.selectPostBypid(pidValue);
     	String title = request.getParameter("title");
-    	Integer uid = post.get_userpid();
-    	replyService.addNewReply(uid, pidValue, cont);
+    	Integer uid = post.getPost_Uid();
+    	String uname = userService.selectUserNameById(uid);
+    	replyService.addNewReply(uid, uname,pidValue, cont);
     	try {
 			request.getRequestDispatcher("showpost/bytitle/"+pid).forward(request, response);
 		} catch (ServletException | IOException e) {

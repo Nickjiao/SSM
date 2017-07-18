@@ -28,10 +28,10 @@ public class UserServiceTest extends SpringTestCase {
         user = userService.selectPostById(0);
         List<Post> p = user.getPosts();
         for(Post pp:p) {
-        	System.out.println(pp.get_title());
+        	System.out.println(pp.getPost_Title());
         	String s;
 			try {
-				s = new String(pp.get_content(),"utf-8");
+				s = new String(pp.getPost_Content(),"utf-8");
 				System.out.println(s);
 			} catch (UnsupportedEncodingException e) {
 				// TODO Auto-generated catch block

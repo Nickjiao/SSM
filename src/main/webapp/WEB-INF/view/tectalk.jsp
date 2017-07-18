@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>  
 <!DOCTYPE html> 
 <html>  
 <head>
@@ -7,10 +8,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <meta name="description" content="The host page" />
         <meta name="keywords" content="host,page"/>
-        <link rel="stylesheet" href="css/style.css" type="text/css"/>
-        <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css"/>
-        <script type="text/javaScript" src="js/jquery.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css" type="text/css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css" type="text/css"/>
+        <script type="text/javaScript" src="${pageContext.request.contextPath}/js/jquery.min.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 </head>  
 
 <body>
@@ -18,17 +19,31 @@
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
+			<ul class="breadcrumb">
+				<li>
+					 <a style="font-size:15px" href="${pageContext.request.contextPath}/">Home</a>
+				</li>
+				<li style="font-size:15px" class="active">
+					Talk
+				</li>
+			</ul>
 			<div class="page-header">
 				<h1>
-					技术讨论区<small>${requestScope.date}</small>
+					学术讨论区<small>&nbsp &nbsp &nbsp ${requestScope.date}</small>
 				</h1>
 			</div>
 			<div class="jumbotron">
-				<h1>
-					Hello, world!
-				</h1>
+				<h2>
+					他的呼唤<small>&nbsp &nbsp &nbsp 饶孟侃</small>
+				</h2>
 				<p>
-					This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
+					 <br />　　有一次我在白杨林中， 
+					 <br />　　听到亲切的一声呼唤；
+					  <br />　　那时月光正望着翁仲，
+					   <br />　　翁仲正望着我。 
+					   <br />　　再听不到呼唤的声音，
+					    <br />　　我吃了一惊， <br />　　四面寻找——翁仲只是对月光出神， 
+					    <br />　　月光只对我冷笑。
 				</p>
 				<p>
 					 <a class="btn btn-primary btn-large" href="#">Learn more</a>
@@ -78,28 +93,24 @@
 				</li>
 			</ul>
 			<div>
+			<%int pageInx = ((Integer)request.getAttribute("index"));
+			  int prePage = pageInx - 1;
+			  int nextPage = pageInx + 1;
+			  int pageNum = ((Integer)request.getAttribute("pageNum"));%>
 			<ul class="pagination">
+				<%if(pageInx != 0) {%>
 				<li>
-					 <a href="#">Prev</a>
+					 <a href="${pageContext.request.contextPath}/tectalk/page/<%=prePage%>">Prev</a>
 				</li>
+				<%} %>
+				<%for(int i = 1;i <= pageNum;i++) {%>
+						<li><a href="${pageContext.request.contextPath}/tectalk/page/<%=i-1%>"><%=i%></a></li>
+				<%} %>
+				<%if(nextPage < pageNum) {%>
 				<li>
-					 <a href="#">1</a>
+					 <a href="${pageContext.request.contextPath}/tectalk/page/<%=nextPage%>">Next</a>
 				</li>
-				<li>
-					 <a href="#">2</a>
-				</li>
-				<li>
-					 <a href="#">3</a>
-				</li>
-				<li>
-					 <a href="#">4</a>
-				</li>
-				<li>
-					 <a href="#">5</a>
-				</li>
-				<li>
-					 <a href="#">Next</a>
-				</li>
+				<%} %>
 			</ul>
 			</div>
 			<table class="table">
@@ -118,206 +129,38 @@
 							回复
 						</th>
 						<th>
-							回复时间
+							最后回帖时间
 						</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr class="info">
-						<td>
-							<a href="${pageContext.request.contextPath}/showpost/bytitle/${requestScope.pid_1}">${requestScope.title_1}</a>
-						</td>
-						<td>
-							${requestScope.author_1}
-						</td>
-						<td>
-							${requestScope.clicknum1}
-						</td>
-						<td>
-							${requestScope.replynum1}
-						</td>
-						<td>
-							${requestScope.lastreplydate1}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							${requestScope.title_2}
-						</td>
-						<td>
-							${requestScope.author_2}
-						</td>
-						<td>
-							${requestScope.clicknum2}
-						</td>
-						<td>
-							${requestScope.replynum2}
-						</td>
-						<td>
-							${requestScope.lastreplydate2}
-						</td>
-					</tr>
-					<tr class="info">
-						<td>
-							${requestScope.title_3}
-						</td>
-						<td>
-							${requestScope.author_3}
-						</td>
-						<td>
-							${requestScope.clicknum3}
-						</td>
-						<td>
-							${requestScope.replynum3}
-						</td>
-						<td>
-							${requestScope.lastreplydate3}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							${requestScope.title_4}
-						</td>
-						<td>
-							${requestScope.author_4}
-						</td>
-						<td>
-							${requestScope.clicknum4}
-						</td>
-						<td>
-							${requestScope.replynum4}
-						</td>
-						<td>
-							${requestScope.lastreplydate4}
-						</td>
-					</tr>
-					<tr class="info">
-						<td>
-							${requestScope.title_5}
-						</td>
-						<td>
-							${requestScope.author_5}
-						</td>
-						<td>
-							${requestScope.clicknum5}
-						</td>
-						<td>
-							${requestScope.replynum5}
-						</td>
-						<td>
-							${requestScope.lastreplydate5}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							${requestScope.title_6}
-						</td>
-						<td>
-							${requestScope.author_6}
-						</td>
-						<td>
-							${requestScope.clicknum6}
-						</td>
-						<td>
-							${requestScope.replynum6}
-						</td>
-						<td>
-							${requestScope.lastreplydate6}
-						</td>
-					</tr>
-					<tr class="info">
-						<td>
-							${requestScope.title_7}
-						</td>
-						<td>
-							${requestScope.author_7}
-						</td>
-						<td>
-							${requestScope.clicknum7}
-						</td>
-						<td>
-							${requestScope.replynum7}
-						</td>
-						<td>
-							${requestScope.lastreplydate7}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							${requestScope.title_8}
-						</td>
-						<td>
-							${requestScope.author_8}
-						</td>
-						<td>
-							${requestScope.clicknum8}
-						</td>
-						<td>
-							${requestScope.replynum8}
-						</td>
-						<td>
-							${requestScope.lastreplydate8}
-						</td>
-					</tr>
-					<tr class="info">
-						<td>
-							${requestScope.title_9}
-						</td>
-						<td>
-							${requestScope.author_9}
-						</td>
-						<td>
-							${requestScope.clicknum9}
-						</td>
-						<td>
-							${requestScope.replynum9}
-						</td>
-						<td>
-							${requestScope.lastreplydate9}
-						</td>
-					</tr>
-					<tr>
-						<td>
-							${requestScope.title_10}
-						</td>
-						<td>
-							${requestScope.author_10}
-						</td>
-						<td>
-							${requestScope.clicknum10}
-						</td>
-						<td>
-							${requestScope.replynum10}
-						</td>
-						<td>
-							${requestScope.lastreplydate10}
-						</td>
-					</tr>
+					<c:forEach var="content" items="${requestScope.showCont}" varStatus="s">
+						<tr class="info">
+							<td><a href="${pageContext.request.contextPath}/showpost/bytitle/${content.post_id}">${content.title}</a></td>
+							<td><a href="${pageContext.request.contextPath}/showpost/bytitle/${content.post_id}">${content.author}</a></td>
+							<td>${content.clickNum}</td>
+							<td>${content.replyNum}</td>
+							<td>${content.replyTime}</td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 			<div>
+
 			<ul class="pagination">
+				<%if(pageInx != 0) {%>
 				<li>
-					 <a href="#">Prev</a>
+					 <a href="${pageContext.request.contextPath}/tectalk/page/<%=prePage%>">Prev</a>
 				</li>
+				<%} %>
+				<%for(int i = 1;i <= pageNum;i++) {%>
+						<li><a href="${pageContext.request.contextPath}/tectalk/page/<%=i-1%>"><%=i%></a></li>
+				<%} %>
+				<%if(nextPage < pageNum) {%>
 				<li>
-					 <a href="#">1</a>
+					 <a href="${pageContext.request.contextPath}/tectalk/page/<%=nextPage%>">Next</a>
 				</li>
-				<li>
-					 <a href="#">2</a>
-				</li>
-				<li>
-					 <a href="#">3</a>
-				</li>
-				<li>
-					 <a href="#">4</a>
-				</li>
-				<li>
-					 <a href="#">5</a>
-				</li>
-				<li>
-					 <a href="#">Next</a>
-				</li>
+				<%} %>
 			</ul>
 			</div>
 			

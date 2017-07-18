@@ -41,4 +41,10 @@ public class UserServiceImpl implements UserService{
 		userDao.addNewUser(userName, userPwd, userEmail);
 	}
 
+	@Override
+	public String selectUserNameById(Integer userId) {
+		// TODO Auto-generated method stub
+		return userDao.selectUserNameById(userId);
+	}
+
 }  

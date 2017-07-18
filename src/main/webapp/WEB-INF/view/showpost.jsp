@@ -25,6 +25,7 @@
         }
         #txtar{
         	border: medium double rgb(100,100,100);
+        	font-size:15px;
         	background:#EEE9E9;
         	width:100%;
         }
@@ -80,8 +81,8 @@
         	<c:forEach  var="reply" items="${requestScope.replys}" varStatus="status">
         		<br/>
         		<table id="txtar">
-        		<tr><td>${reply.reply_Uname}</td></tr>
-        		<tr style="text-align:center;"><td>${reply.reply_Content}</td></tr>
+        		<tr"><td>${status.index}</td></tr>
+        		<tr style="text-align:center;"><td>${reply}</td></tr>
         		</table>
         	</c:forEach >
     </div>
